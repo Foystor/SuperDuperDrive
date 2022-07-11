@@ -8,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class NoteService {
 
@@ -33,5 +35,9 @@ public class NoteService {
                         note.getNoteDescription(),
                         user.getUserId())
         );
+    }
+
+    public List<Note> getNoteList() {
+        return noteMapper.getNoteList();
     }
 }
