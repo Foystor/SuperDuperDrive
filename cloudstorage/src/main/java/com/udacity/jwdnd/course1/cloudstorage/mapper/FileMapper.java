@@ -11,7 +11,7 @@ public interface FileMapper {
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
             " VALUES(#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
     @Options(useGeneratedKeys = true, keyProperty = "fileId")
-    int insertFile();
+    int insertFile(File file);
 
     @Update("UPDATE FILES SET filename=#{fileName},contenttype=#{contentType},filesize=#{fileSize},userid=#{userId},filedata=#{fileData} WHERE fileid=#{fileId}")
     void updateFile(File file);
