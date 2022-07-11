@@ -40,4 +40,8 @@ public class NoteService {
     public List<Note> getNoteList() {
         return noteMapper.getNoteList();
     }
+
+    public void deleteNote(String noteTitle) {
+        noteMapper.deleteNote(noteTitle);
+    }
 }
