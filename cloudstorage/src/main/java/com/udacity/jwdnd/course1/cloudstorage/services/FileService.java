@@ -44,4 +44,8 @@ public class FileService {
     public List<File> getFiles() {
         return this.fileMapper.getFileList();
     }
+
+    public void deleteFile(String fileName) {
+        fileMapper.deleteFile(fileName);
+    }
 }
