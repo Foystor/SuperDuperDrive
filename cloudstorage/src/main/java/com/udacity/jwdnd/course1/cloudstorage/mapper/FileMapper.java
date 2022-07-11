@@ -5,8 +5,8 @@ import org.apache.ibatis.annotations.*;
 
 @Mapper
 public interface FileMapper {
-    @Select("SELECT * FROM FILES WHERE fileid = #{fileId}")
-    File getFile(Integer fileId);
+    @Select("SELECT * FROM FILES WHERE filename = #{fileName}")
+    File getFile(String fileName);
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
             " VALUES(#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")
