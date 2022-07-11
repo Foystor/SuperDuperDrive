@@ -41,8 +41,12 @@ public class FileService {
                         file.getBytes()));
     }
 
-    public List<File> getFiles() {
+    public List<File> getFileList() {
         return this.fileMapper.getFileList();
+    }
+
+    public File getFile(String fileName) {
+        return this.fileMapper.getFile(fileName);
     }
 
     public void deleteFile(String fileName) {

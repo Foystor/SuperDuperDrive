@@ -24,7 +24,7 @@ public class HomeController {
 
     @GetMapping
     public String homeView(Model model) {
-        model.addAttribute("fileList", fileService.getFiles());
+        model.addAttribute("fileList", fileService.getFileList());
         return "home";
     }
 }
