@@ -21,8 +21,10 @@ public class NoteController {
         String uploadErrorMsg = null;
         boolean saveErrorMsg = false;
 
+        note.setNoteTitle(note.getNoteTitle().trim());
+
         // check if note name duplicate
-        if (!noteService.isNoteTitleAvailable(note.getNoteTitle().trim())) {
+        if (!noteService.isNoteTitleAvailable(note.getNoteTitle())) {
             uploadErrorMsg = "The note name already exists.";
         }
 
