@@ -24,7 +24,11 @@ public class FileService {
         this.userMapper = userMapper;
     }
 
-    public int CreateFile(MultipartFile file) throws IOException {
+    public boolean isFileNameAvailable(String fileName) {
+        return fileMapper.getFile(fileName) == null;
+    }
+
+    public int createFile(MultipartFile file) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userMapper.getUser(authentication.getName());
 
@@ -38,6 +42,6 @@ public class FileService {
     }
 
     public List<File> getFiles() {
-        return this.fileMapper.getFiles();
+        return this.fileMapper.getFileList();
     }
 }

@@ -8,7 +8,10 @@ import java.util.List;
 @Mapper
 public interface FileMapper {
     @Select("SELECT * FROM FILES")
-    List<File> getFiles();
+    List<File> getFileList();
+
+    @Select("SELECT * FROM FILES WHERE filename = #{fileName}")
+    File getFile(String fileName);
 
     @Insert("INSERT INTO FILES (filename, contenttype, filesize, userid, filedata)" +
             " VALUES(#{fileName}, #{contentType}, #{fileSize}, #{userId}, #{fileData})")

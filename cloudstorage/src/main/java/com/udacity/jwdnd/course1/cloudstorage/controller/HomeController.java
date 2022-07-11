@@ -30,14 +30,38 @@ public class HomeController {
 
     @PostMapping
     public String uploadFile(@RequestParam("fileUpload") MultipartFile file, Model model) throws IOException {
+        String uploadErrorMsg = null;
+        boolean saveErrorMsg = false;
 
         // check if file is empty
         if (file.isEmpty()) {
-            model.addAttribute("uploadErrorMsg","Please select a file to upload.");
-        } else {
-            fileService.CreateFile(file);
-            model.addAttribute("success",true);
+            uploadErrorMsg = "Please select a file to upload.";
         }
+
+        // check if file name duplicate
+        if (uploadErrorMsg == null) {
+            if (!fileService.isFileNameAvailable(file.getOriginalFilename())) {
+                uploadErrorMsg = "The file name already exists.";
+            }
+        }
+
+        if (uploadErrorMsg == null) {
+            int rowsAdded = fileService.createFile(file);
+            if (rowsAdded < 0) {
+                saveErrorMsg = true;
+            }
+        }
+
+        if (uploadErrorMsg == null) {
+            if (saveErrorMsg) {
+                model.addAttribute("saveErrorMsg",true);
+            } else {
+                model.addAttribute("success",true);
+            }
+        } else {
+            model.addAttribute("uploadErrorMsg", uploadErrorMsg);
+        }
+
         return "result";
     }
 }
