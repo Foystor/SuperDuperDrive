@@ -41,6 +41,14 @@ public class NoteService {
         return noteMapper.getNoteList();
     }
 
+    public Note getNote(String noteTitle) {
+        return noteMapper.getNote(noteTitle);
+    }
+
+    public void updateNote(Note note) {
+        noteMapper.updateNote(note);
+    }
+
     public void deleteNote(String noteTitle) {
         noteMapper.deleteNote(noteTitle);
     }

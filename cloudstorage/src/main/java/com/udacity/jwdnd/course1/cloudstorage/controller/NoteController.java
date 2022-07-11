@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @Controller
 @RequestMapping("/note")
 public class NoteController {
@@ -23,15 +25,34 @@ public class NoteController {
 
         note.setNoteTitle(note.getNoteTitle().trim());
 
-        // check if note name duplicate
-        if (!noteService.isNoteTitleAvailable(note.getNoteTitle())) {
-            uploadErrorMsg = "The note name already exists.";
-        }
+        if (note.getNoteId() == null) {
+            // create note
+            // check if note title duplicate
+            if (!noteService.isNoteTitleAvailable(note.getNoteTitle())) {
+                uploadErrorMsg = "The note name already exists.";
+            }
 
-        if (uploadErrorMsg == null) {
-            int rowsAdded = noteService.createNote(note);
-            if (rowsAdded < 0) {
-                saveErrorMsg = true;
+            if (uploadErrorMsg == null) {
+                int rowsAdded = noteService.createNote(note);
+                if (rowsAdded < 0) saveErrorMsg = true;
+            }
+        } else {
+            // update note
+            // check if note title duplicate
+            if (noteService.isNoteTitleAvailable(note.getNoteTitle())) {
+                noteService.updateNote(note);
+            } else {
+                Note checkNote = noteService.getNote(note.getNoteTitle());
+                if (Objects.equals(checkNote.getNoteId(), note.getNoteId())) {
+                    // check if there is changes
+                    if (checkNote.getNoteDescription().equals(note.getNoteDescription())) {
+                        uploadErrorMsg = "No changes has been made.";
+                    } else {
+                        noteService.updateNote(note);
+                    }
+                } else {
+                    uploadErrorMsg = "The note title already exists.";
+                }
             }
         }
 
