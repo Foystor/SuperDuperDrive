@@ -29,7 +29,7 @@ public class NoteController {
             // create note
             // check if note title duplicate
             if (!noteService.isNoteTitleAvailable(note.getNoteTitle())) {
-                uploadErrorMsg = "The note name already exists.";
+                uploadErrorMsg = "The note title already exists.";
             }
 
             if (uploadErrorMsg == null) {
