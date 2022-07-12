@@ -32,16 +32,16 @@ public class CredentialService {
 
         // encrypt password
         SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        String encodedSalt = Base64.getEncoder().encodeToString(salt);
-        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedSalt);
+        byte[] key = new byte[16];
+        random.nextBytes(key);
+        String encodedKey = Base64.getEncoder().encodeToString(key);
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(), encodedKey);
 
         return credentialMapper.insertCredential(
                 new Credential(null,
                         credential.getUrl(),
                         credential.getUsername(),
-                        encodedSalt,
+                        encodedKey,
                         encryptedPassword,
                         user.getUserId()));
     }
