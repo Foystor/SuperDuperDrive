@@ -45,7 +45,7 @@ public class CredentialController {
                 } else {
                     // update credential
                     if (Objects.equals(credential.getCredentialId(), element.getCredentialId())) {
-                        uploadErrorMsg = "No changes has been made.";
+                        uploadErrorMsg = "No changes have been made.";
                     } else {
                         uploadErrorMsg = "The credential already exists.";
                     }

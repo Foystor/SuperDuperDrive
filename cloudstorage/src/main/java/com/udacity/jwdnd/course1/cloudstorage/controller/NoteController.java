@@ -46,7 +46,7 @@ public class NoteController {
                 if (Objects.equals(checkNote.getNoteId(), note.getNoteId())) {
                     // check if there is changes
                     if (checkNote.getNoteDescription().equals(note.getNoteDescription())) {
-                        uploadErrorMsg = "No changes has been made.";
+                        uploadErrorMsg = "No changes have been made.";
                     } else {
                         noteService.updateNote(note);
                     }
