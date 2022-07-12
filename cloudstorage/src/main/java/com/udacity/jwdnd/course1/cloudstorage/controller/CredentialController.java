@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/credential")
+@RequestMapping("/home/credential")
 public class CredentialController {
 
     private final CredentialService credentialService;

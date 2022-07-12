@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Objects;
 
 @Controller
-@RequestMapping("/note")
+@RequestMapping("/home/note")
 public class NoteController {
 
     private final NoteService noteService;
