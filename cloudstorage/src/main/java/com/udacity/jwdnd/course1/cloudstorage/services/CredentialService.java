@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.UserMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +44,14 @@ public class CredentialService {
                         encodedSalt,
                         encryptedPassword,
                         user.getUserId()));
+    }
+
+    public void updateCredential(Credential credential) {
+        String encryptedPassword = encryptionService.encryptValue(credential.getPassword(),
+                credentialMapper.getCredential(credential.getCredentialId()).getKey());
+        credential.setPassword(encryptedPassword);
+
+        credentialMapper.updateCredential(credential);
     }
 
     public List<Credential> getCredentialList() {

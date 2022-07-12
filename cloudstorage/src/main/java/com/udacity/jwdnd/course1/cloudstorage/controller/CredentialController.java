@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/credential")
@@ -36,14 +37,30 @@ public class CredentialController {
             if (credential.getUrl().matches(element.getUrl())
                     && credential.getUsername().matches(element.getUsername())
                     && credential.getPassword().matches(encryptionService.decryptValue(element.getPassword(),element.getKey()))) {
-                uploadErrorMsg = "The credential already exists.";
+
+                // check if it's creating or editing
+                if (credential.getCredentialId() == null) {
+                    // create credential
+                    uploadErrorMsg = "The credential already exists.";
+                } else {
+                    // update credential
+                    if (Objects.equals(credential.getCredentialId(), element.getCredentialId())) {
+                        uploadErrorMsg = "No changes has been made.";
+                    } else {
+                        uploadErrorMsg = "The credential already exists.";
+                    }
+                }
             }
         }
 
         if (uploadErrorMsg == null) {
-            int rowsAdded = credentialService.createCredential(credential);
-            if (rowsAdded < 0) {
-                saveErrorMsg = true;
+            if (credential.getCredentialId() == null) {
+                // create credential
+                int rowsAdded = credentialService.createCredential(credential);
+                if (rowsAdded < 0) saveErrorMsg = true;
+            } else {
+                // update credential
+                credentialService.updateCredential(credential);
             }
         }
 
