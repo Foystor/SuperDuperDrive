@@ -192,6 +192,17 @@
 
         <!--For opening the note modal-->
         <script type="text/javascript">
+            // Check which tab was selected and stores it in the localStorage via the setItem method,
+            // then retrieve the selected tab via the getItem method and redirect to that tab.
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+                console.log("tab shown...");
+                localStorage.setItem('activeTab', $(e.target).attr('href'));
+            });
+            var activeTab = localStorage.getItem('activeTab');
+            if (activeTab) {
+                $('.nav-tabs a[href="' + activeTab + '"]').tab('show');
+            }
+
             // For opening the note modal
             function showNoteModal(noteId, noteTitle, noteDescription) {
                 $('#note-id').val(noteId ? noteId : '');
