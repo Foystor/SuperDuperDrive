@@ -48,4 +48,8 @@ public class CredentialService {
     public List<Credential> getCredentialList() {
         return this.credentialMapper.getCredentialList();
     }
+
+    public void deleteCredential(Integer credentialId) {
+        credentialMapper.deleteCredential(credentialId);
+    }
 }

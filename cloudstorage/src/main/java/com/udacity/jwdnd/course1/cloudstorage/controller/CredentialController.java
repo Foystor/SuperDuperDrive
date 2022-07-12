@@ -5,9 +5,7 @@ import com.udacity.jwdnd.course1.cloudstorage.services.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.services.EncryptionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -60,5 +58,11 @@ public class CredentialController {
         }
 
         return "result";
+    }
+
+    @GetMapping("/delete/{credentialId}")
+    public String deleteNote(@PathVariable("credentialId") Integer credentialId) {
+        credentialService.deleteCredential(credentialId);
+        return "redirect:/home";
     }
 }
