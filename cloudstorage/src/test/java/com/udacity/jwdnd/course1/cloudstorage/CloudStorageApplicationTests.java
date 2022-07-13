@@ -20,6 +20,8 @@ class CloudStorageApplicationTests {
 
 	private WebDriver driver;
 
+	private String baseURL;
+
 	@BeforeAll
 	static void beforeAll() {
 		WebDriverManager.chromedriver().setup();
@@ -28,6 +30,7 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
+		baseURL = "http://localhost:" + port;
 	}
 
 	@AfterEach
@@ -199,6 +202,42 @@ class CloudStorageApplicationTests {
 
 	}
 
+	/**
+	 * Verify that an unauthorized user can only access the login and signup pages.
+	 */
+	@Test
+	public void pageAccessRestriction_unauthorizedUser_onlyCanAccessLoginAndSignupPage() {
+		// test login access
+		driver.get(baseURL + "/home");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get(baseURL + "/home/file");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		driver.get(baseURL + "/logout");
+		Assertions.assertEquals("Login", driver.getTitle());
+
+		// test signup access
+		driver.get(baseURL + "/signup");
+		Assertions.assertEquals("Sign Up", driver.getTitle());
+	}
 
 
+	/**
+	 * Verify that the home page is accessible after login and is no longer accessible after logout.
+	 */
+	@Test
+	public void pageAccessRestriction_signupLoginAndLogoutUser_homePageNotAccessibleAfterLogout() {
+		// Create a test account
+		doMockSignUp("Home Page Restriction","Test","HPRT","123");
+		doLogIn("LFT", "123");
+
+		Assertions.assertEquals("Home", driver.getTitle());
+
+		HomePage homePage = new HomePage(driver);
+		homePage.logout();
+
+		driver.get(baseURL + "/home");
+		Assertions.assertFalse(driver.getTitle().matches("Home"));
+	}
 }
