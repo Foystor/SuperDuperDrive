@@ -228,16 +228,18 @@ class CloudStorageApplicationTests {
 	 */
 	@Test
 	public void pageAccessRestriction_signupLoginAndLogoutUser_homePageNotAccessibleAfterLogout() {
+		// test access home page after login
 		// Create a test account
 		doMockSignUp("Home Page Restriction","Test","HPRT","123");
-		doLogIn("LFT", "123");
+		doLogIn("HPRT", "123");
 
 		Assertions.assertEquals("Home", driver.getTitle());
 
+		// test access home page after logout
 		HomePage homePage = new HomePage(driver);
 		homePage.logout();
-
 		driver.get(baseURL + "/home");
+
 		Assertions.assertFalse(driver.getTitle().matches("Home"));
 	}
 }
