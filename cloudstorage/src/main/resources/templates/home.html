@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
+                        <button id="add-note-btn" style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showNoteModal()">
                             + Add a New Note
                         </button>
 
@@ -77,11 +77,11 @@
                                 <tbody>
                                     <tr th:each="note : ${noteList}">
                                         <td>
-                                            <button type="button" class="btn btn-success" th:onclick="javascript:showNoteModal( [[${note.getNoteId()}]],[[${note.getNoteTitle()}]],[[${note.getNoteDescription()}]] )">Edit</button>
-                                            <a th:href="@{'/home/note/delete/' + ${note.getNoteTitle()}}" class="btn btn-danger">Delete</a>
+                                            <button type="button" class="btn btn-success edit-note-btn" th:onclick="javascript:showNoteModal( [[${note.getNoteId()}]],[[${note.getNoteTitle()}]],[[${note.getNoteDescription()}]] )">Edit</button>
+                                            <a th:href="@{'/home/note/delete/' + ${note.getNoteTitle()}}" class="btn btn-danger delete-note-btn">Delete</a>
                                         </td>
-                                        <th th:text="${note.getNoteTitle()}" scope="row">Example Note Title</th>
-                                        <td th:text="${note.getNoteDescription()}">Example Note Description </td>
+                                        <th th:text="${note.getNoteTitle()}" class="note-title-list" scope="row">Example Note Title</th>
+                                        <td th:text="${note.getNoteDescription()}" class="note-description-list">Example Note Description </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -112,14 +112,14 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
+                                        <button id="save-note-btn" type="button" class="btn btn-primary" onclick="$('#noteSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-credentials" role="tabpanel" aria-labelledby="nav-credentials-tab">
-                        <button style="margin: 0.25em;" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
+                        <button style="margin: 0.25em;" id="add-credential-btn" type="button" class="btn btn-info float-right" onclick="showCredentialModal()">
                             + Add a New Credential
                         </button>
 
@@ -136,12 +136,12 @@
                                 <tbody>
                                 <tr th:each="credential : ${credentialList}">
                                     <td>
-                                        <button type="button" class="btn btn-success" th:onclick="javascript:showCredentialModal( [[${credential.getCredentialId()}]],[[${credential.getUrl()}]],[[${credential.getUsername()}]],[[${@encryptionService.decryptValue(credential.getPassword(),credential.getKey())}]] )">Edit</button>
-                                        <a th:href="@{'/home/credential/delete/' + ${credential.getCredentialId()}}" class="btn btn-danger">Delete</a>
+                                        <button type="button" class="btn btn-success edit-credential-btn" th:onclick="javascript:showCredentialModal( [[${credential.getCredentialId()}]],[[${credential.getUrl()}]],[[${credential.getUsername()}]],[[${@encryptionService.decryptValue(credential.getPassword(),credential.getKey())}]] )">Edit</button>
+                                        <a th:href="@{'/home/credential/delete/' + ${credential.getCredentialId()}}" class="btn btn-danger delete-credential-btn">Delete</a>
                                     </td>
-                                    <th th:text="${credential.getUrl()}" scope="row">Example Credential URL</th>
-                                    <td th:text="${credential.getUsername()}">Example Credential Username</td>
-                                    <td th:text="${credential.getPassword()}">Example Credential Password</td>
+                                    <th class="credential-url-list" th:text="${credential.getUrl()}" scope="row">Example Credential URL</th>
+                                    <td class="credential-username-list" th:text="${credential.getUsername()}">Example Credential Username</td>
+                                    <td class="credential-password-list" th:text="${credential.getPassword()}">Example Credential Password</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -176,7 +176,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">Save changes</button>
+                                        <button id="save-credential-btn" type="button" class="btn btn-primary" onclick="$('#credentialSubmit').click();">Save changes</button>
                                     </div>
                                 </div>
                             </div>
