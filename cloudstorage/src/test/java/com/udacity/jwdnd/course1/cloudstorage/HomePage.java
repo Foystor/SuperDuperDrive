@@ -83,15 +83,12 @@ public class HomePage {
     }
 
     public void addNote(String title, String description) {
-        noteTab.click();
-        addNoteBtn.click();
         noteTitleField.sendKeys(title);
         noteDescriptionField.sendKeys(description);
         saveNoteBtn.click();
     }
 
     public List<Note> getNotes() {
-        noteTab.click();
         List<Note> notes = new ArrayList<>();
         for (int i = 0; i < noteTitleDisplay.size(); i++) {
             Note note = new Note(null,
@@ -105,7 +102,6 @@ public class HomePage {
     }
 
     public void editNote(int index, String title, String description) {
-        noteTab.click();
         editNoteBtn.get(index).click();
         noteTitleField.clear();
         noteTitleField.sendKeys(title);
@@ -115,13 +111,10 @@ public class HomePage {
     }
 
     public void deleteNote(int index) {
-        noteTab.click();
         deleteNoteBtn.get(index).click();
     }
 
     public void addCredential(String url, String username, String password) {
-        credentialTab.click();
-        addCredentialBtn.click();
         credentialUrlField.sendKeys(url);
         credentialUsernameField.sendKeys(username);
         credentialPasswordField.sendKeys(password);
@@ -129,7 +122,6 @@ public class HomePage {
     }
 
     public List<Credential> getEncryptedCredentials() {
-        credentialTab.click();
         List<Credential> credentials = new ArrayList<>();
         for (int i = 0; i < credentialUrlDisplay.size(); i++) {
             Credential credential = new Credential(null,
@@ -145,7 +137,6 @@ public class HomePage {
     }
 
     public void editCredential(int index, String url, String username, String password) {
-        credentialTab.click();
         editCredentialBtn.get(index).click();
         credentialUrlField.clear();
         credentialUrlField.sendKeys(url);
@@ -157,7 +148,22 @@ public class HomePage {
     }
 
     public void deleteCredential(int index) {
-        credentialTab.click();
         deleteCredentialBtn.get(index).click();
+    }
+
+    public WebElement getNoteTab() {
+        return noteTab;
+    }
+
+    public WebElement getCredentialTab() {
+        return credentialTab;
+    }
+
+    public WebElement getAddNoteBtn() {
+        return addNoteBtn;
+    }
+
+    public WebElement getSaveNoteBtn() {
+        return saveNoteBtn;
     }
 }

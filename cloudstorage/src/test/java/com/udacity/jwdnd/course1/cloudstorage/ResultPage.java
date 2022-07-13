@@ -13,7 +13,7 @@ public class ResultPage {
         PageFactory.initElements(driver,this);
     }
 
-    public void continueBack() {
-        continueLink.click();
+    public WebElement getContinueLink() {
+        return continueLink;
     }
 }

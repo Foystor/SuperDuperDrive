@@ -1,8 +1,10 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,7 +22,11 @@ class CloudStorageApplicationTests {
 
 	private WebDriver driver;
 
+	private  WebDriverWait wait;
+
 	private String baseURL;
+
+	private JavascriptExecutor js;
 
 	@BeforeAll
 	static void beforeAll() {
@@ -30,7 +36,9 @@ class CloudStorageApplicationTests {
 	@BeforeEach
 	public void beforeEach() {
 		this.driver = new ChromeDriver();
-		baseURL = "http://localhost:" + port;
+		this.wait = new WebDriverWait(driver, 2);
+		this.baseURL = "http://localhost:" + port;
+		this.js = (JavascriptExecutor) driver;
 	}
 
 	@AfterEach
@@ -241,5 +249,40 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 
 		Assertions.assertFalse(driver.getTitle().matches("Home"));
+	}
+
+	/**
+	 * Create a note and verify it is displayed.
+	 */
+	@Test
+	public void noteOperation_createNote_displayNewNote() {
+		// Create a test account
+		doMockSignUp("Create Note","Test","CNT","123");
+		doLogIn("CNT", "123");
+
+		// switch to note tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// open note modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddNoteBtn());
+
+		// add and save note
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveNoteBtn()));
+		homePage.addNote("Hello","World");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// get displayed note
+		homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		Note displayedNote = homePage.getNotes().get(0);
+
+		Assertions.assertEquals("Hello", displayedNote.getNoteTitle());
+		Assertions.assertEquals("World", displayedNote.getNoteDescription());
 	}
 }
