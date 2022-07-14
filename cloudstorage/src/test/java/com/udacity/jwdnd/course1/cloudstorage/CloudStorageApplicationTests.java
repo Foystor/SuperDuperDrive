@@ -374,6 +374,9 @@ class CloudStorageApplicationTests {
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
 		homePage.deleteNote(0);
 
+		// return to home page
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
 		// get displayed note
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
 		List<Note> displayedNote = homePage.getNotes();
@@ -612,9 +615,15 @@ class CloudStorageApplicationTests {
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 		homePage.deleteCredential(0);
 
+		// return to home page
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
 		// delete credential2
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 		homePage.deleteCredential(0);
+
+		// return to home page
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
 
 		// get displayed credential
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
