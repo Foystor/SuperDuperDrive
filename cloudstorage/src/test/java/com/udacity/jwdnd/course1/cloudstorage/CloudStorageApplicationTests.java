@@ -276,9 +276,11 @@ class CloudStorageApplicationTests {
 		ResultPage resultPage = new ResultPage(driver);
 		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
 
-		// get displayed note
+		// switch to note tab
 		homePage = new HomePage(driver);
 		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// get displayed note
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
 		Note displayedNote = homePage.getNotes().get(0);
 
