@@ -419,13 +419,15 @@ class CloudStorageApplicationTests {
 		// get displayed credential
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 		List<Credential> displayedCredentials = homePage.getEncryptedCredentials();
-		
+
+		// check credential1
 		Credential credentialData = credentialService.getCredentialList().get(0);
 		Credential credentialDisplay = displayedCredentials.get(0);
 		Assertions.assertEquals("facebook.com", credentialDisplay.getUrl());
 		Assertions.assertEquals("admin1", credentialDisplay.getUsername());
 		Assertions.assertEquals(encryptionService.encryptValue("pass1",credentialData.getKey()), credentialDisplay.getPassword());
 
+		// check credential2
 		credentialData = credentialService.getCredentialList().get(1);
 		credentialDisplay = displayedCredentials.get(1);
 		Assertions.assertEquals("google.com", credentialDisplay.getUrl());
