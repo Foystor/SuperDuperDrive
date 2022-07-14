@@ -22,7 +22,17 @@ public class NoteService {
     }
 
     public boolean isNoteTitleAvailable(String noteTitle) {
-        return noteMapper.getNote(noteTitle) == null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer userId = userMapper.getUser(authentication.getName()).getUserId();
+
+        boolean noteTitleNotExist = true;
+        for (Note note : getNoteList(userId)) {
+            if (note.getNoteTitle().matches(noteTitle)) {
+                noteTitleNotExist = false;
+                break;
+            }
+        }
+        return noteTitleNotExist;
     }
 
     public int createNote(Note note) {
