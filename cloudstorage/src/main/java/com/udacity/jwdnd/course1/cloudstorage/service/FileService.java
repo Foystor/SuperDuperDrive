@@ -40,8 +40,8 @@ public class FileService {
                         file.getBytes()));
     }
 
-    public List<File> getFileList() {
-        return this.fileMapper.getFileList();
+    public List<File> getFileList(Integer userId) {
+        return this.fileMapper.getFileList(userId);
     }
 
     public File getFile(String fileName) {
