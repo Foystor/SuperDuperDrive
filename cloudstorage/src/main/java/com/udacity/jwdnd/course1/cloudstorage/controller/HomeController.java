@@ -31,7 +31,7 @@ public class HomeController {
     public String homeView(Authentication auth, @ModelAttribute("newNote") Note note, @ModelAttribute("newCredential") Credential Credential, Model model) {
         Integer userId = userService.getUser(auth.getName()).getUserId();
         model.addAttribute("fileList", fileService.getFileList(userId));
-        model.addAttribute("noteList", noteService.getNoteList());
+        model.addAttribute("noteList", noteService.getNoteList(userId));
         model.addAttribute("credentialList", credentialService.getCredentialList(userId));
         return "home";
     }
