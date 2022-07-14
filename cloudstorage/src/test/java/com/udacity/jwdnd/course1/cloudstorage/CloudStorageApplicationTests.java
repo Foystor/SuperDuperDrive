@@ -371,7 +371,6 @@ class CloudStorageApplicationTests {
 		homePage.deleteNote(0);
 
 		// get displayed note
-		homePage = new HomePage(driver);
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
 		List<Note> displayedNote = homePage.getNotes();
 
