@@ -14,6 +14,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
 import java.io.File;
+import java.util.List;
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class CloudStorageApplicationTests {
 
@@ -339,5 +341,46 @@ class CloudStorageApplicationTests {
 
 		Assertions.assertEquals("Hello!", displayedNote.getNoteTitle());
 		Assertions.assertEquals("World!", displayedNote.getNoteDescription());
+	}
+
+	/**
+	 * Delete a note and verify that the note is no longer displayed.
+	 */
+	@Test
+	public void noteOperation_deleteNote_noteNotDisplay() {
+		// Create a test account
+		doMockSignUp("Delete Note","Test","DNT","123");
+		doLogIn("DNT", "123");
+
+		// switch to note tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// open note modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddNoteBtn());
+
+		// add and save note
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveNoteBtn()));
+		homePage.addNote("Hello","World");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// switch to note tab
+		homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// delete note
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		homePage.deleteNote(0);
+
+		// get displayed note
+		homePage = new HomePage(driver);
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		List<Note> displayedNote = homePage.getNotes();
+
+		Assertions.assertEquals(0, displayedNote.size());
 	}
 }
