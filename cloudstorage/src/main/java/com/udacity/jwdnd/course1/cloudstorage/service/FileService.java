@@ -24,7 +24,17 @@ public class FileService {
     }
 
     public boolean isFileNameAvailable(String fileName) {
-        return fileMapper.getFile(fileName) == null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Integer userId = userMapper.getUser(authentication.getName()).getUserId();
+
+        boolean fileNameNotExist = true;
+        for (File file : getFileList(userId)) {
+            if (file.getFileName().matches(fileName)) {
+                fileNameNotExist = false;
+                break;
+            }
+        }
+        return fileNameNotExist;
     }
 
     public int createFile(MultipartFile file) throws IOException {
