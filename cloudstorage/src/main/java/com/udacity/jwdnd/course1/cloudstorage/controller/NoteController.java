@@ -70,8 +70,9 @@ public class NoteController {
     }
 
     @GetMapping("/delete/{noteTitle}")
-    public String deleteNote(@PathVariable("noteTitle") String noteTitle) {
+    public String deleteNote(@PathVariable("noteTitle") String noteTitle, Model model) {
         noteService.deleteNote(noteTitle);
-        return "redirect:/home";
+        model.addAttribute("success",true);
+        return "result";
     }
 }

@@ -82,8 +82,9 @@ public class CredentialController {
     }
 
     @GetMapping("/delete/{credentialId}")
-    public String deleteNote(@PathVariable("credentialId") Integer credentialId) {
+    public String deleteNote(@PathVariable("credentialId") Integer credentialId, Model model) {
         credentialService.deleteCredential(credentialId);
-        return "redirect:/home";
+        model.addAttribute("success",true);
+        return "result";
     }
 }

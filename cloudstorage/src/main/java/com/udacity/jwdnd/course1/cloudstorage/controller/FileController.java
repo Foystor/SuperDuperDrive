@@ -60,9 +60,10 @@ public class FileController {
     }
 
     @GetMapping("/delete/{fileName}")
-    public String deleteFile(@PathVariable("fileName") String fileName) {
+    public String deleteFile(@PathVariable("fileName") String fileName, Model model) {
         fileService.deleteFile(fileName);
-        return "redirect:/home";
+        model.addAttribute("success",true);
+        return "result";
     }
 
     @GetMapping("/view/{fileName}")
