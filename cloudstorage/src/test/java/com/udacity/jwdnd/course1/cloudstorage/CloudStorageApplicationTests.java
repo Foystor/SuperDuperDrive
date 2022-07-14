@@ -327,7 +327,7 @@ class CloudStorageApplicationTests {
 
 		// edit and save note
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveNoteBtn()));
-		homePage.editNote(0,"Hello!", "World!");
+		homePage.editNote("Hello!", "World!");
 
 		// return to home page
 		resultPage = new ResultPage(driver);

@@ -104,7 +104,7 @@ public class HomePage {
         return notes;
     }
 
-    public void editNote(int index, String title, String description) {
+    public void editNote(String title, String description) {
         noteTitleField.clear();
         noteTitleField.sendKeys(title);
         noteDescriptionField.clear();
