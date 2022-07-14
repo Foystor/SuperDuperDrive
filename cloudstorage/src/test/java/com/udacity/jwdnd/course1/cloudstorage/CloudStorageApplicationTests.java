@@ -288,10 +288,6 @@ class CloudStorageApplicationTests {
 		ResultPage resultPage = new ResultPage(driver);
 		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
 
-		// switch to note tab
-		homePage = new HomePage(driver);
-		js.executeScript("arguments[0].click();", homePage.getNoteTab());
-
 		// get displayed note
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
 		Note displayedNote = homePage.getNotes().get(0);
@@ -325,10 +321,6 @@ class CloudStorageApplicationTests {
 		ResultPage resultPage = new ResultPage(driver);
 		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
 
-		// switch to note tab
-		homePage = new HomePage(driver);
-		js.executeScript("arguments[0].click();", homePage.getNoteTab());
-
 		// open note modal
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
 		js.executeScript("arguments[0].click();", homePage.getEditNoteBtn().get(0));
@@ -340,10 +332,6 @@ class CloudStorageApplicationTests {
 		// return to home page
 		resultPage = new ResultPage(driver);
 		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
-
-		// switch to note tab
-		homePage = new HomePage(driver);
-		js.executeScript("arguments[0].click();", homePage.getNoteTab());
 
 		// get displayed note
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
@@ -377,10 +365,6 @@ class CloudStorageApplicationTests {
 		// return to home page
 		ResultPage resultPage = new ResultPage(driver);
 		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
-
-		// switch to note tab
-		homePage = new HomePage(driver);
-		js.executeScript("arguments[0].click();", homePage.getNoteTab());
 
 		// delete note
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
@@ -435,7 +419,7 @@ class CloudStorageApplicationTests {
 		// get displayed credential
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 		List<Credential> displayedCredentials = homePage.getEncryptedCredentials();
-
+		
 		Credential credentialData = credentialService.getCredentialList().get(0);
 		Credential credentialDisplay = displayedCredentials.get(0);
 		Assertions.assertEquals("facebook.com", credentialDisplay.getUrl());
