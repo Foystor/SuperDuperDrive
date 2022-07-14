@@ -138,8 +138,7 @@ public class HomePage {
         return credentials;
     }
 
-    public void editCredential(int index, String url, String username, String password) {
-        editCredentialBtn.get(index).click();
+    public void editCredential(String url, String username, String password) {
         credentialUrlField.clear();
         credentialUrlField.sendKeys(url);
         credentialUsernameField.clear();

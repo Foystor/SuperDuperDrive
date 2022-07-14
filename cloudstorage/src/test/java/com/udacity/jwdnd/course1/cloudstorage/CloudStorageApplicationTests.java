@@ -488,4 +488,81 @@ class CloudStorageApplicationTests {
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
 		Assertions.assertEquals("pass2", homePage.getCredentialPasswordField().getAttribute("value"));
 	}
+
+	/**
+	 * Edit the credentials and verify that the changes are displayed.
+	 */
+	@Test
+	public void credentialOperation_editCredentials_displayCredentialsChanges() {
+		// Create a test account
+		doMockSignUp("Edit Credentials","Test","ECT","123");
+		doLogIn("ECT", "123");
+
+		// switch to credential tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getCredentialTab());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential1
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("facebook.com", "admin1", "pass1");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential2
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("google.com", "admin2", "pass2");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getEditCredentialBtn().get(0));
+
+		// edit and save credential
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.editCredential("youtube.com", "admin3", "pass3");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+
+		// check edited credential1
+		Credential credentialData = credentialService.getCredentialList().get(0);
+		Credential credentialDisplay = homePage.getEncryptedCredentials().get(0);
+		Assertions.assertEquals("youtube.com", credentialDisplay.getUrl());
+		Assertions.assertEquals("admin3", credentialDisplay.getUsername());
+		Assertions.assertEquals(encryptionService.encryptValue("pass3",credentialData.getKey()), credentialDisplay.getPassword());
+
+		// open credential modal
+		js.executeScript("arguments[0].click();", homePage.getEditCredentialBtn().get(1));
+
+		// edit and save credential
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.editCredential("instagram.com", "admin4", "pass4");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+
+		// check edited credential2
+		credentialData = credentialService.getCredentialList().get(1);
+		credentialDisplay = homePage.getEncryptedCredentials().get(1);
+		Assertions.assertEquals("instagram.com", credentialDisplay.getUrl());
+		Assertions.assertEquals("admin4", credentialDisplay.getUsername());
+		Assertions.assertEquals(encryptionService.encryptValue("pass4",credentialData.getKey()), credentialDisplay.getPassword());
+	}
 }
