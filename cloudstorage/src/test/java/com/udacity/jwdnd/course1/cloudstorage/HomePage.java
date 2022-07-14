@@ -169,4 +169,12 @@ public class HomePage {
     public List<WebElement> getEditNoteBtn() {
         return editNoteBtn;
     }
+
+    public WebElement getAddCredentialBtn() {
+        return addCredentialBtn;
+    }
+
+    public WebElement getSaveCredentialBtn() {
+        return saveCredentialBtn;
+    }
 }

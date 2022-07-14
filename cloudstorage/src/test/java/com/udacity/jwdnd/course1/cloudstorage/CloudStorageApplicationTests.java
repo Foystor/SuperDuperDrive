@@ -1,6 +1,9 @@
 package com.udacity.jwdnd.course1.cloudstorage;
 
+import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
+import com.udacity.jwdnd.course1.cloudstorage.service.CredentialService;
+import com.udacity.jwdnd.course1.cloudstorage.service.EncryptionService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -10,6 +13,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 
@@ -21,6 +25,12 @@ class CloudStorageApplicationTests {
 
 	@LocalServerPort
 	private int port;
+
+	@Autowired
+	private CredentialService credentialService;
+
+	@Autowired
+	private EncryptionService encryptionService;
 
 	private WebDriver driver;
 
@@ -382,5 +392,60 @@ class CloudStorageApplicationTests {
 		List<Note> displayedNote = homePage.getNotes();
 
 		Assertions.assertEquals(0, displayedNote.size());
+	}
+
+	/**
+	 * Create a set of credentials, verifies that they are displayed,
+	 * and verifies that the displayed password is encrypted.
+	 */
+	@Test
+	public void credentialOperation_createCredentials_displayNewCredentialAndEncryptedPassword() {
+		// Create a test account
+		doMockSignUp("Create Credentials","Test","CCT","123");
+		doLogIn("CCT", "123");
+
+		// switch to credential tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getCredentialTab());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential1
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("facebook.com", "admin1", "pass1");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential2
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("google.com", "admin2", "pass2");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// get displayed credential
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		List<Credential> displayedCredentials = homePage.getEncryptedCredentials();
+
+		Credential credentialData = credentialService.getCredentialList().get(0);
+		Credential credentialDisplay = displayedCredentials.get(0);
+		Assertions.assertEquals("facebook.com", credentialDisplay.getUrl());
+		Assertions.assertEquals("admin1", credentialDisplay.getUsername());
+		Assertions.assertEquals(encryptionService.encryptValue("pass1",credentialData.getKey()), credentialDisplay.getPassword());
+
+		credentialData = credentialService.getCredentialList().get(1);
+		credentialDisplay = displayedCredentials.get(1);
+		Assertions.assertEquals("google.com", credentialDisplay.getUrl());
+		Assertions.assertEquals("admin2", credentialDisplay.getUsername());
+		Assertions.assertEquals(encryptionService.encryptValue("pass2",credentialData.getKey()), credentialDisplay.getPassword());
 	}
 }
