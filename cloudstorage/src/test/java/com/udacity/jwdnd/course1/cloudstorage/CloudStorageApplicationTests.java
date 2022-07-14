@@ -565,4 +565,56 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("admin4", credentialDisplay.getUsername());
 		Assertions.assertEquals(encryptionService.encryptValue("pass4",credentialData.getKey()), credentialDisplay.getPassword());
 	}
+
+	/**
+	 * Delete an existing set of credentials and verify that the credentials are no longer displayed.
+	 */
+	@Test
+	public void credentialOperation_deleteCredentials_credentialsNotDisplay() {
+		// Create a test account
+		doMockSignUp("Delete Credentials","Test","DCT","123");
+		doLogIn("DCT", "123");
+
+		// switch to credential tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getCredentialTab());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential1
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("facebook.com", "admin1", "pass1");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential2
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("google.com", "admin2", "pass2");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// delete credential1
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		homePage.deleteCredential(0);
+
+		// delete credential2
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		homePage.deleteCredential(0);
+
+		// get displayed credential
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		List<Credential> displayedCredential = homePage.getEncryptedCredentials();
+
+		Assertions.assertEquals(0, displayedCredential.size());
+	}
 }
