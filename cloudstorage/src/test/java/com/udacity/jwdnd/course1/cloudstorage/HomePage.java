@@ -53,6 +53,9 @@ public class HomePage {
     @FindBy(id = "credential-password")
     private WebElement credentialPasswordField;
 
+    @FindBy(id = "close-credential-btn")
+    private WebElement closeCredentialBtn;
+
     @FindBy(id = "save-credential-btn")
     private WebElement saveCredentialBtn;
 
@@ -146,6 +149,10 @@ public class HomePage {
         saveCredentialBtn.click();
     }
 
+    public void closeCredentialModal() {
+        closeCredentialBtn.click();
+    }
+
     public void deleteCredential(int index) {
         deleteCredentialBtn.get(index).click();
     }
@@ -176,5 +183,13 @@ public class HomePage {
 
     public WebElement getSaveCredentialBtn() {
         return saveCredentialBtn;
+    }
+
+    public List<WebElement> getEditCredentialBtn() {
+        return editCredentialBtn;
+    }
+
+    public WebElement getCredentialPasswordField() {
+        return credentialPasswordField;
     }
 }

@@ -434,4 +434,58 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("admin2", credentialDisplay.getUsername());
 		Assertions.assertEquals(encryptionService.encryptValue("pass2",credentialData.getKey()), credentialDisplay.getPassword());
 	}
+
+	/**
+	 * View an existing set of credentials, verifies that the viewable password is unencrypted
+	 */
+	@Test
+	public void credentialOperation_viewCredentials_showUnencryptedPassword() {
+		// Create a test account
+		doMockSignUp("View Credentials","Test","VCT","123");
+		doLogIn("VCT", "123");
+
+		// switch to credential tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getCredentialTab());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential1
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("facebook.com", "admin1", "pass1");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddCredentialBtn());
+
+		// add and save credential2
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		homePage.addCredential("google.com", "admin2", "pass2");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// open credential modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		js.executeScript("arguments[0].click();", homePage.getEditCredentialBtn().get(0));
+
+		// check password1
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		Assertions.assertEquals("pass1", homePage.getCredentialPasswordField().getAttribute("value"));
+		homePage.closeCredentialModal();
+
+		// open credential modal
+		js.executeScript("arguments[0].click();", homePage.getEditCredentialBtn().get(1));
+
+		// check password2
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveCredentialBtn()));
+		Assertions.assertEquals("pass2", homePage.getCredentialPasswordField().getAttribute("value"));
+	}
 }
