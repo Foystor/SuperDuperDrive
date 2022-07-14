@@ -235,10 +235,7 @@ class CloudStorageApplicationTests {
 		driver.get(baseURL + "/home");
 		Assertions.assertEquals("Login", driver.getTitle());
 
-		driver.get(baseURL + "/home/file");
-		Assertions.assertEquals("Login", driver.getTitle());
-
-		driver.get(baseURL + "/logout");
+		driver.get(baseURL + "/login");
 		Assertions.assertEquals("Login", driver.getTitle());
 
 		// test signup access
