@@ -285,4 +285,57 @@ class CloudStorageApplicationTests {
 		Assertions.assertEquals("Hello", displayedNote.getNoteTitle());
 		Assertions.assertEquals("World", displayedNote.getNoteDescription());
 	}
+
+	/**
+	 * Edit an existing note and verify that the changes are displayed.
+	 */
+	@Test
+	public void noteOperation_editNote_displayNoteChanges() {
+		// Create a test account
+		doMockSignUp("Edit Note","Test","ENT","123");
+		doLogIn("ENT", "123");
+
+		// switch to note tab
+		HomePage homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// open note modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		js.executeScript("arguments[0].click();", homePage.getAddNoteBtn());
+
+		// add and save note
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveNoteBtn()));
+		homePage.addNote("Hello","World");
+
+		// return to home page
+		ResultPage resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// switch to note tab
+		homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// open note modal
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		js.executeScript("arguments[0].click();", homePage.getEditNoteBtn().get(0));
+
+		// edit and save note
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getSaveNoteBtn()));
+		homePage.editNote(0,"Hello!", "World!");
+
+		// return to home page
+		resultPage = new ResultPage(driver);
+		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
+
+		// switch to note tab
+		homePage = new HomePage(driver);
+		js.executeScript("arguments[0].click();", homePage.getNoteTab());
+
+		// get displayed note
+		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddNoteBtn()));
+		Note displayedNote = homePage.getNotes().get(0);
+
+		Assertions.assertEquals("Hello!", displayedNote.getNoteTitle());
+		Assertions.assertEquals("World!", displayedNote.getNoteDescription());
+	}
 }

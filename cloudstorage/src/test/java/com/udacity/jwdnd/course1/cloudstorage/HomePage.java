@@ -102,7 +102,6 @@ public class HomePage {
     }
 
     public void editNote(int index, String title, String description) {
-        editNoteBtn.get(index).click();
         noteTitleField.clear();
         noteTitleField.sendKeys(title);
         noteDescriptionField.clear();
@@ -165,5 +164,9 @@ public class HomePage {
 
     public WebElement getSaveNoteBtn() {
         return saveNoteBtn;
+    }
+
+    public List<WebElement> getEditNoteBtn() {
+        return editNoteBtn;
     }
 }
