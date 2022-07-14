@@ -392,8 +392,6 @@ class CloudStorageApplicationTests {
 		// Create a test account
 		doMockSignUp("Create Credentials","Test","CCT","123");
 		doLogIn("CCT", "123");
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Integer userId = userService.getUser(authentication.getName()).getUserId();
 
 		// switch to credential tab
 		HomePage homePage = new HomePage(driver);
@@ -426,6 +424,7 @@ class CloudStorageApplicationTests {
 		// get displayed credential
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 		List<Credential> displayedCredentials = homePage.getEncryptedCredentials();
+		Integer userId = userService.getUser("CCT").getUserId();
 
 		// check credential1
 		Credential credentialData = credentialService.getCredentialList(userId).get(0);
@@ -504,8 +503,6 @@ class CloudStorageApplicationTests {
 		// Create a test account
 		doMockSignUp("Edit Credentials","Test","ECT","123");
 		doLogIn("ECT", "123");
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		Integer userId = userService.getUser(authentication.getName()).getUserId();
 
 		// switch to credential tab
 		HomePage homePage = new HomePage(driver);
@@ -547,6 +544,7 @@ class CloudStorageApplicationTests {
 		resultPage = new ResultPage(driver);
 		js.executeScript("arguments[0].click();", resultPage.getContinueLink());
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
+		Integer userId = userService.getUser("ECT").getUserId();
 
 		// check edited credential1
 		Credential credentialData = credentialService.getCredentialList(userId).get(0);
