@@ -4,6 +4,7 @@ import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.Note;
 import com.udacity.jwdnd.course1.cloudstorage.service.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.service.EncryptionService;
+import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -16,6 +17,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.io.File;
 import java.util.List;
@@ -25,6 +28,9 @@ class CloudStorageApplicationTests {
 
 	@LocalServerPort
 	private int port;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private CredentialService credentialService;
@@ -386,6 +392,8 @@ class CloudStorageApplicationTests {
 		// Create a test account
 		doMockSignUp("Create Credentials","Test","CCT","123");
 		doLogIn("CCT", "123");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Integer userId = userService.getUser(authentication.getName()).getUserId();
 
 		// switch to credential tab
 		HomePage homePage = new HomePage(driver);
@@ -420,14 +428,14 @@ class CloudStorageApplicationTests {
 		List<Credential> displayedCredentials = homePage.getEncryptedCredentials();
 
 		// check credential1
-		Credential credentialData = credentialService.getCredentialList().get(0);
+		Credential credentialData = credentialService.getCredentialList(userId).get(0);
 		Credential credentialDisplay = displayedCredentials.get(0);
 		Assertions.assertEquals("facebook.com", credentialDisplay.getUrl());
 		Assertions.assertEquals("admin1", credentialDisplay.getUsername());
 		Assertions.assertEquals(encryptionService.encryptValue("pass1",credentialData.getKey()), credentialDisplay.getPassword());
 
 		// check credential2
-		credentialData = credentialService.getCredentialList().get(1);
+		credentialData = credentialService.getCredentialList(userId).get(1);
 		credentialDisplay = displayedCredentials.get(1);
 		Assertions.assertEquals("google.com", credentialDisplay.getUrl());
 		Assertions.assertEquals("admin2", credentialDisplay.getUsername());
@@ -496,6 +504,8 @@ class CloudStorageApplicationTests {
 		// Create a test account
 		doMockSignUp("Edit Credentials","Test","ECT","123");
 		doLogIn("ECT", "123");
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Integer userId = userService.getUser(authentication.getName()).getUserId();
 
 		// switch to credential tab
 		HomePage homePage = new HomePage(driver);
@@ -539,7 +549,7 @@ class CloudStorageApplicationTests {
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 
 		// check edited credential1
-		Credential credentialData = credentialService.getCredentialList().get(0);
+		Credential credentialData = credentialService.getCredentialList(userId).get(0);
 		Credential credentialDisplay = homePage.getEncryptedCredentials().get(0);
 		Assertions.assertEquals("youtube.com", credentialDisplay.getUrl());
 		Assertions.assertEquals("admin3", credentialDisplay.getUsername());
@@ -558,7 +568,7 @@ class CloudStorageApplicationTests {
 		wait.until(ExpectedConditions.elementToBeClickable(homePage.getAddCredentialBtn()));
 
 		// check edited credential2
-		credentialData = credentialService.getCredentialList().get(1);
+		credentialData = credentialService.getCredentialList(userId).get(1);
 		credentialDisplay = homePage.getEncryptedCredentials().get(1);
 		Assertions.assertEquals("instagram.com", credentialDisplay.getUrl());
 		Assertions.assertEquals("admin4", credentialDisplay.getUsername());

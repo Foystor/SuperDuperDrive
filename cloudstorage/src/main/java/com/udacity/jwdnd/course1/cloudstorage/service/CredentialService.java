@@ -53,8 +53,8 @@ public class CredentialService {
         credentialMapper.updateCredential(credential);
     }
 
-    public List<Credential> getCredentialList() {
-        return this.credentialMapper.getCredentialList();
+    public List<Credential> getCredentialList(Integer userId) {
+        return this.credentialMapper.getCredentialList(userId);
     }
 
     public void deleteCredential(Integer credentialId) {

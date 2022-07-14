@@ -3,6 +3,8 @@ package com.udacity.jwdnd.course1.cloudstorage.controller;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.service.CredentialService;
 import com.udacity.jwdnd.course1.cloudstorage.service.EncryptionService;
+import com.udacity.jwdnd.course1.cloudstorage.service.UserService;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,16 +16,18 @@ import java.util.Objects;
 @RequestMapping("/home/credential")
 public class CredentialController {
 
+    private final UserService userService;
     private final CredentialService credentialService;
     private final EncryptionService encryptionService;
 
-    public CredentialController(CredentialService credentialService, EncryptionService encryptionService) {
+    public CredentialController(UserService userService, CredentialService credentialService, EncryptionService encryptionService) {
+        this.userService = userService;
         this.credentialService = credentialService;
         this.encryptionService = encryptionService;
     }
 
     @PostMapping("/upload")
-    public String uploadCredential(@ModelAttribute("newCredential") Credential credential, Model model) {
+    public String uploadCredential(Authentication auth, @ModelAttribute("newCredential") Credential credential, Model model) {
         boolean saveErrorMsg = false;
         String uploadErrorMsg = null;
 
@@ -32,7 +36,7 @@ public class CredentialController {
         credential.setPassword(credential.getPassword().trim());
 
         // check if credential duplicate
-        List<Credential> credentialList = credentialService.getCredentialList();
+        List<Credential> credentialList = credentialService.getCredentialList(userService.getUser(auth.getName()).getUserId());
         for (Credential element : credentialList) {
             if (credential.getUrl().matches(element.getUrl())
                     && credential.getUsername().matches(element.getUsername())
